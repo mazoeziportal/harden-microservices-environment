@@ -103,7 +103,7 @@ services:
     infra_container_image: ""
     cluster_dns_server: 10.43.0.10
     fail_swap_on: false
-    generate_serving_certificate: true
+    generate_serving_certificate: false
   kubeproxy:
     image: ""
     extra_args: {}
@@ -125,80 +125,8 @@ authentication:
   webhook: null
 addons: |
   ---
-  apiVersion: v1
-  kind: Namespace
-  metadata:
-    name: ingress-nginx
-  ---
-  apiVersion: rbac.authorization.k8s.io/v1
-  kind: Role
-  metadata:
-    name: default-psp-role
-    namespace: ingress-nginx
-  rules:
-  - apiGroups:
-    - extensions
-    resourceNames:
-    - default-psp
-    resources:
-    - podsecuritypolicies
-    verbs:
-    - use
-  ---
-  apiVersion: rbac.authorization.k8s.io/v1
-  kind: RoleBinding
-  metadata:
-    name: default-psp-rolebinding
-    namespace: ingress-nginx
-  roleRef:
-    apiGroup: rbac.authorization.k8s.io
-    kind: Role
-    name: default-psp-role
-  subjects:
-  - apiGroup: rbac.authorization.k8s.io
-    kind: Group
-    name: system:serviceaccounts
-  - apiGroup: rbac.authorization.k8s.io
-    kind: Group
-    name: system:authenticated
-  ---
-  apiVersion: v1
-  kind: Namespace
-  metadata:
-    name: cattle-system
-  ---
-  apiVersion: rbac.authorization.k8s.io/v1
-  kind: Role
-  metadata:
-    name: default-psp-role
-    namespace: cattle-system
-  rules:
-  - apiGroups:
-    - extensions
-    resourceNames:
-    - default-psp
-    resources:
-    - podsecuritypolicies
-    verbs:
-    - use
-  ---
-  apiVersion: rbac.authorization.k8s.io/v1
-  kind: RoleBinding
-  metadata:
-    name: default-psp-rolebinding
-    namespace: cattle-system
-  roleRef:
-    apiGroup: rbac.authorization.k8s.io
-    kind: Role
-    name: default-psp-role
-  subjects:
-  - apiGroup: rbac.authorization.k8s.io
-    kind: Group
-    name: system:serviceaccounts
-  - apiGroup: rbac.authorization.k8s.io
-    kind: Group
-    name: system:authenticated
-  ---
+
+
   apiVersion: policy/v1beta1
   kind: PodSecurityPolicy
   metadata:
@@ -225,54 +153,173 @@ addons: |
     - configMap
     - projected
   ---
-  apiVersion: rbac.authorization.k8s.io/v1
-  kind: ClusterRole
+  apiVersion: networking.k8s.io/v1
+  kind: NetworkPolicy
   metadata:
-    name: psp:restricted
-  rules:
-  - apiGroups:
-    - extensions
-    resourceNames:
-    - restricted
-    resources:
-    - podsecuritypolicies
-    verbs:
-    - use
-  ---
-  apiVersion: rbac.authorization.k8s.io/v1
-  kind: ClusterRoleBinding
-  metadata:
-    name: psp:restricted
-  roleRef:
-    apiGroup: rbac.authorization.k8s.io
-    kind: ClusterRole
-    name: psp:restricted
-  subjects:
-  - apiGroup: rbac.authorization.k8s.io
-    kind: Group
-    name: system:serviceaccounts
-  - apiGroup: rbac.authorization.k8s.io
-    kind: Group
-    name: system:authenticated
+    name: default-allow-all
+  spec:
+    podSelector: {}
+    ingress:
+    - {}
+    egress:
+    - {}
+    policyTypes:
+    - Ingress
+    - Egress
   ---
   apiVersion: v1
   kind: ServiceAccount
   metadata:
-    name: tiller
-    namespace: kube-system
-  ---
-  apiVersion: rbac.authorization.k8s.io/v1
-  kind: ClusterRoleBinding
-  metadata:
-    name: tiller
-  roleRef:
-    apiGroup: rbac.authorization.k8s.io
-    kind: ClusterRole
-    name: cluster-admin
-  subjects:
-  - kind: ServiceAccount
-    name: tiller
-    namespace: kube-system
+    name: default
+  automountServiceAccountToken: false 
+  # apiVersion: v1
+  # kind: Namespace
+  # metadata:
+  #   name: ingress-nginx
+  # ---
+  # apiVersion: rbac.authorization.k8s.io/v1
+  # kind: Role
+  # metadata:
+  #   name: default-psp-role
+  #   namespace: ingress-nginx
+  # rules:
+  # - apiGroups:
+  #   - extensions
+  #   resourceNames:
+  #   - default-psp
+  #   resources:
+  #   - podsecuritypolicies
+  #   verbs:
+  #   - use
+  # ---
+  # apiVersion: rbac.authorization.k8s.io/v1
+  # kind: RoleBinding
+  # metadata:
+  #   name: default-psp-rolebinding
+  #   namespace: ingress-nginx
+  # roleRef:
+  #   apiGroup: rbac.authorization.k8s.io
+  #   kind: Role
+  #   name: default-psp-role
+  # subjects:
+  # - apiGroup: rbac.authorization.k8s.io
+  #   kind: Group
+  #   name: system:serviceaccounts
+  # - apiGroup: rbac.authorization.k8s.io
+  #   kind: Group
+  #   name: system:authenticated
+  # ---
+  # apiVersion: v1
+  # kind: Namespace
+  # metadata:
+  #   name: cattle-system
+  # ---
+  # apiVersion: rbac.authorization.k8s.io/v1
+  # kind: Role
+  # metadata:
+  #   name: default-psp-role
+  #   namespace: cattle-system
+  # rules:
+  # - apiGroups:
+  #   - extensions
+  #   resourceNames:
+  #   - default-psp
+  #   resources:
+  #   - podsecuritypolicies
+  #   verbs:
+  #   - use
+  # ---
+  # apiVersion: rbac.authorization.k8s.io/v1
+  # kind: RoleBinding
+  # metadata:
+  #   name: default-psp-rolebinding
+  #   namespace: cattle-system
+  # roleRef:
+  #   apiGroup: rbac.authorization.k8s.io
+  #   kind: Role
+  #   name: default-psp-role
+  # subjects:
+  # - apiGroup: rbac.authorization.k8s.io
+  #   kind: Group
+  #   name: system:serviceaccounts
+  # - apiGroup: rbac.authorization.k8s.io
+  #   kind: Group
+  #   name: system:authenticated
+  # ---
+  # apiVersion: policy/v1beta1
+  # kind: PodSecurityPolicy
+  # metadata:
+  #   name: restricted
+  # spec:
+  #   requiredDropCapabilities:
+  #   - NET_RAW
+  #   privileged: false
+  #   allowPrivilegeEscalation: false
+  #   defaultAllowPrivilegeEscalation: false
+  #   fsGroup:
+  #     rule: RunAsAny
+  #   runAsUser:
+  #     rule: MustRunAsNonRoot
+  #   seLinux:
+  #     rule: RunAsAny
+  #   supplementalGroups:
+  #     rule: RunAsAny
+  #   volumes:
+  #   - emptyDir
+  #   - secret
+  #   - persistentVolumeClaim
+  #   - downwardAPI
+  #   - configMap
+  #   - projected
+  # ---
+  # apiVersion: rbac.authorization.k8s.io/v1
+  # kind: ClusterRole
+  # metadata:
+  #   name: psp:restricted
+  # rules:
+  # - apiGroups:
+  #   - extensions
+  #   resourceNames:
+  #   - restricted
+  #   resources:
+  #   - podsecuritypolicies
+  #   verbs:
+  #   - use
+  # ---
+  # apiVersion: rbac.authorization.k8s.io/v1
+  # kind: ClusterRoleBinding
+  # metadata:
+  #   name: psp:restricted
+  # roleRef:
+  #   apiGroup: rbac.authorization.k8s.io
+  #   kind: ClusterRole
+  #   name: psp:restricted
+  # subjects:
+  # - apiGroup: rbac.authorization.k8s.io
+  #   kind: Group
+  #   name: system:serviceaccounts
+  # - apiGroup: rbac.authorization.k8s.io
+  #   kind: Group
+  #   name: system:authenticated
+  # ---
+  # apiVersion: v1
+  # kind: ServiceAccount
+  # metadata:
+  #   name: tiller
+  #   namespace: kube-system
+  # ---
+  # apiVersion: rbac.authorization.k8s.io/v1
+  # kind: ClusterRoleBinding
+  # metadata:
+  #   name: tiller
+  # roleRef:
+  #   apiGroup: rbac.authorization.k8s.io
+  #   kind: ClusterRole
+  #   name: cluster-admin
+  # subjects:
+  # - kind: ServiceAccount
+  #   name: tiller
+  #   namespace: kube-system
 addons_include: []
 system_images: 
   etcd: rancher/coreos-etcd:v3.4.14-rancher1
