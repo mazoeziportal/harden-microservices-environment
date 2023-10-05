@@ -60,15 +60,15 @@ services:
     win_extra_env: []
     service_cluster_ip_range: 10.43.0.0/16
     service_node_port_range: ""
-    pod_security_policy: true
+    pod_security_policy: false #true
     always_pull_images: false
-    secrets_encryption_config:
-      enabled: true
-    audit_log:
-      enabled: true
-    admission_configuration:
-    event_rate_limit:
-      enabled: true
+    secrets_encryption_config: null
+    #   enabled: true
+    audit_log: null
+    #   enabled: true
+    admission_configuration: null
+    event_rate_limit: null
+    #   enabled: true
   kube-controller:
     image: ""
     extra_args:  
