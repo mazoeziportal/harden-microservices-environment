@@ -74,7 +74,7 @@ services:
   kube-controller:
     image: ""
     extra_args: {} 
-       feature-gates: RotateKubeletServerCertificate=true
+      feature-gates: RotateKubeletServerCertificate=true
     extra_binds: []
     extra_env: []
     win_extra_args: {}
