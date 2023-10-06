@@ -92,13 +92,15 @@ services:
     win_extra_env: []
   kubelet:
     image: ""
-    extra_args: 
+    extra_args:
 #      --kubelet-certificate-authority: /etc/kubernetes/ssl/kube-ca.pem
       feature-gates: RotateKubeletServerCertificate=true
       protect-kernel-defaults: "true"
       tls-cipher-suites: TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305
     extra_binds: []
     extra_env: []
+      - name: KUBELET_CERTIFICATE_AUTHORITY
+        value: /etc/kubernetes/ssl/kube-ca.pem
     win_extra_args: {}
     win_extra_binds: []
     win_extra_env: []
