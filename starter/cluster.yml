@@ -92,7 +92,7 @@ services:
     win_extra_env: []
   kubelet:
     image: ""
-    extra_args: {}
+    extra_args: 
       --kubelet-certificate-authority: /etc/kubernetes/ssl/kube-ca.pem
       # feature-gates: RotateKubeletServerCertificate=true
       # protect-kernel-defaults: "true"
