@@ -60,19 +60,21 @@ services:
     win_extra_env: []
     service_cluster_ip_range: 10.43.0.0/16
     service_node_port_range: ""
-    pod_security_policy: false #true
+    pod_security_policy: true
     always_pull_images: false
-    secrets_encryption_config: null
-    #   enabled: true
+    secrets_encryption_config: #null
+       enabled: true
+       custom_config: null
     audit_log: null
     #   enabled: true
     admission_configuration: null
-    event_rate_limit: null
-    #   enabled: true
+    event_rate_limit: #null
+       enabled: true
+       configuration: null
   kube-controller:
     image: ""
     extra_args: {} 
-      # feature-gates: RotateKubeletServerCertificate=true
+       feature-gates: RotateKubeletServerCertificate=true
     extra_binds: []
     extra_env: []
     win_extra_args: {}
@@ -91,6 +93,7 @@ services:
   kubelet:
     image: ""
     extra_args: {}
+      --kubelet-certificate-authority: /etc/kubernetes/ssl/kube-ca.pem
       # feature-gates: RotateKubeletServerCertificate=true
       # protect-kernel-defaults: "true"
       # tls-cipher-suites: TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,TLS_RSA_WITH_AES_256_GCM_SHA384,TLS_RSA_WITH_AES_128_GCM_SHA256
