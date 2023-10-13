@@ -100,7 +100,7 @@ services:
     extra_binds: []
     extra_env: 
       # --kubelet-certificate-authority: /etc/kubernetes/ssl/kube-ca.pem
-      --kubelet-certificate-authority: /etc/kubernetes/manifests
+      #--kubelet-certificate-authority: /etc/kubernetes/manifests
       # ---kubelet-certificate-authority: /etc/kubernetes/manifests
       # - name: KUBELET_CERTIFICATE_AUTHORITY
       #   value: /etc/kubernetes/ssl/kube-ca.pem
