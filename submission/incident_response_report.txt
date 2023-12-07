@@ -23,3 +23,4 @@ kubectl --kubeconfig kube_config_cluster.yml delete pod <pod_name> --grace-perio
 - It is good to have a monitoring tool setup like the Grafana dashboards to visualize what is happening in the
   system. It would be helpful to have alerts from Falco in Grafana for events like these.To use admission controllers
   to allow only certain images to be imported and started within the pods with monitoring
+
