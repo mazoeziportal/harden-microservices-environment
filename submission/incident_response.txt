@@ -1,0 +1,25 @@
+1. Incident commander name Hz.A
+
+2. Executive summary of what happened
+Three crypto mining pods named moneropool, minergate, and cryptonight were launched by an attacker. This resulted to a huge CPU utilization  and some abnormalities were detected.
+An attacker was able to get control of the cluster and use compute resources to abuse for crypto-mining.
+
+3. Summary of what was affected
+Unexpected spike in resource usage and the clusters were ran out of resources.
+A huge spike in the CPU usage
+
+4. Summary of the impact
+The crypto-miner was consuming a huge amount of CPU and other resources as a result, the cluster is unable to serve the incoming traffic.
+The attacker managed to run crypto miners on the system and spiked the CPU usage. This crashed the running pods due to the system's incapability of handling the CPU spike.
+An attacker was able to get control of the cluster and use compute resources to abuse for crypto-mining.Hence as a result, the cluster is unable to serve the incoming traffic.
+The crypto-miner was consuming a huge amount of CPU thereby slowly bringing the system to a halt, and suspicious services running in the cluster fighting for system resource with legitimate services.
+
+
+5. Summary of the remediation steps
+Action  taken to remov a suspicious or unrecognized services within the cluster/node by using the following command:
+kubectl --kubeconfig kube_config_cluster.yml delete pod <pod_name> --grace-period=0 --force. Then the pods are removed. 
+
+6. Summary of lessons learned
+- It is good to have a monitoring tool setup like the Grafana dashboards to visualize what is happening in the
+  system. It would be helpful to have alerts from Falco in Grafana for events like these.To use admission controllers
+  to allow only certain images to be imported and started within the pods with monitoring

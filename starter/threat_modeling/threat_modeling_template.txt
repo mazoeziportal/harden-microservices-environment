@@ -2,45 +2,12 @@ Docker Threat Modeling
 Given Docker's system components and the STRIDE framework, identify five potential threats that may arise.
 
 
-1. Repudiation - action on container may be taken without tracability. If ocker client actions are not adeqately logged and attributed to users or processes, individuals can deny their involvment in container-related activites. As a result it makes difficult to track and address security incidents
-   or unauthorized chnages. 
-2. Information Disclosure - Attackers who compromise a container may attempt to breakout of the container's isolatio, gaining access to the host systemand potentially other containers. Unauthorized access to sensative data or control of the underlying host , leading to data breaches, system compromise and 
-   further attacks on the Docker infrastructure.
-3. Denial of Service - Containers with poorly defined resource limits or containers launched with malicious intent can conume excesive CPU, Memory, or network resources,  thereby impacting availability, degraded performance, and disrupting containerized applicationsrunning on the same host or in the cluster , potentially causing a denial of service. 
-4. Elevation of Privilege: Network traffic spoofing can allow an attacker to gain unauthorized access to the host and containers. To prevent undesired esclations, care should be taken when installing unsigned packages or images.
-5. Spoofing - container image may be spoofed when the attackers create malicious or counterfiet container images that mimic legitimate ones. As a result execuation of unauthorized or malicious code within containers, leading to data breaches and system compromise.  
-
 
 
 Kubernetes Threat Modeling
 Given Kubernetes' system components and the STRIDE framework, identify five potential threats that may arise.
 
-1. Spoofing: Pod identity spoofing may be occure when an atttacker spoof the identity of a legitimate pod by gaining unauthorized access to the cluster or through misconfigured RBAC(Role-Based Access Control) setting.This leads an attacker to impersonate a trusted pod, potentailly gaining unauthorized access to the resources or data.
-2. Tampering: configuration tampering may be created when unauthorized modification of kubernetes resource configurations (e.g. Deployment, configMap) or container images. As a result service disruptions, data corruption or unauthorized code execuation within  containers will be happened. 
-3. Information Disclousre: This happen when there is unauthorized acess to the secret, leading to xposure of sensitive credentials and configuration data, which can lead o security breaches.
-4. Denial of Service: this is because of resource exhaustion. Uncontrolled resource consumption, such as CPU, Memory, or network bandwidth, by malicious or poorly configured pods. Leading to degraded performance, service unavailability, and potentail cluster-wide disruptions.
-5. Elivation of Privilege: Attackers may exploite vulnerabilities in container runtimes or kernel to escape container isolation and gain elevated privileges on the host node. This results complete compromise of the node , potentailly affecting the entire cluster's security and availability.  
-
 
 Docker-bench Run Results and Analysis
 From the failed findings, select and document 3 findings from the Docker-bench results that you want to harden based on the 5 attack surface areas you identified in Step 1. At least 1 of the 3 hardened findings should be different from the ones mentioned in the exercise (i.e. 5.10, 5.14, and 5.22).
 
-[FAIL] 1.1.5 Ensure auditing is configured for Docker files and directories - /var/lib/docker (Automated)
-Remediation: Add a rule for the /var/lib/docker directory
-             Add the line as below to the /etc/audit/audit.rules file
-             -w /var/lib/docker -k docker
-             Then restart the audit daemon: service auditd restart
-
-[FAIL] 1.1.6 Ensure auditing is configured for Docker files and directories - /etc/docker (Automated)
-Remediation: Add a rule for the /etc/docker directory
-             Add the line as below to the /etc/audit/audit.rules file
-             -w /etc/docker -k docker
-             Then restart the audit daemon: service auditd restart
-
-[FAIL] 1.1.7 Ensure auditing is configured for Docker files and directories - docker.service (Automated)
-Remediation: Add the line as below to the /etc/audit/audit.rules file
-             -w /usr/lib/systemd/system/docker.service -k docker
-             Then restart the audit daemon: service auditd restart
-
-[FAIL] 1.1.10 Ensure auditing is configured for Docker files and directories - /etc/default/docker (Automated)
-[FAIL] 1.1.13 Ensure auditing is configured for Docker files and directories - /etc/sysconfig/docker (Automated)
